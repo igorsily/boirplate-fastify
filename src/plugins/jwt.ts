@@ -1,20 +1,8 @@
 import jwt from '@fastify/jwt';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { env } from '@/config/env';
+import { env } from '@/config/env.js';
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
-  }
-  interface FastifyRequest {
-    user: {
-      id: string;
-      email: string;
-      username: string;
-    };
-  }
-}
 
 export default fp(async (fastify: FastifyInstance) => {
   await fastify.register(jwt, {

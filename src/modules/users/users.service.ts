@@ -1,13 +1,18 @@
-import type { NewUser, User } from '@/db/schema/users';
-import { hashPassword } from '@/utils/bcrypt';
-import { ConflictError, NotFoundError } from '@/utils/errors';
-import type { UsersRepository } from './users.repository';
+import type { FastifyBaseLogger } from 'fastify';
+import type { NewUser, User } from '@/db/schema/users.js';
+import { hashPassword } from '@/utils/bcrypt.js';
+import { ConflictError, NotFoundError } from '@/utils/errors.js';
+import type { UsersRepository } from './users.repository.js';
 
 export class UsersService {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private logger?: FastifyBaseLogger
+  ) {}
 
   async createUser(data: Omit<NewUser, 'passwordHash'> & { password: string }): Promise<User> {
     const { password, ...userData } = data;
+    this.logger?.info('Creating user with email: %s', userData.email);
 
     const existingEmail = await this.usersRepository.findByEmail(userData.email);
     if (existingEmail) {

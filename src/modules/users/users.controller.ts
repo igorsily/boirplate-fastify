@@ -1,19 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { CreateUserInput, ParamsInput, QueryInput, UpdateUserInput } from './users.schemas';
-import type { UsersService } from './users.service';
+import type { CreateUserInput, ParamsInput, QueryInput, UpdateUserInput } from './users.schemas.js';
+import type { UsersService } from './users.service.js';
 
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   async create(request: FastifyRequest<{ Body: CreateUserInput }>, reply: FastifyReply) {
     const user = await this.usersService.createUser(request.body);
-    const { passwordHash, ...userWithoutPassword } = user;
+    const { ...userWithoutPassword } = user;
     return reply.status(201).send(userWithoutPassword);
   }
 
   async getById(request: FastifyRequest<{ Params: ParamsInput }>, reply: FastifyReply) {
     const user = await this.usersService.getUserById(request.params.id);
-    const { passwordHash, ...userWithoutPassword } = user;
+    const { ...userWithoutPassword } = user;
     return reply.send(userWithoutPassword);
   }
 
@@ -25,7 +25,7 @@ export class UsersController {
     reply: FastifyReply
   ) {
     const user = await this.usersService.updateUser(request.params.id, request.body);
-    const { passwordHash, ...userWithoutPassword } = user;
+    const { ...userWithoutPassword } = user;
     return reply.send(userWithoutPassword);
   }
 

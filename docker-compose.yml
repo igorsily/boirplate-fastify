@@ -1,15 +1,13 @@
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:16-alpine
+    image: bitnami/postgresql:latest
     container_name: backend_postgres
     environment:
       POSTGRES_USER: backend_user
       POSTGRES_PASSWORD: backend_password
       POSTGRES_DB: backend_db
     ports:
-      - '5432:5432'
+      - '5434:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -24,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend_app
     environment:
-      DATABASE_URL: postgresql://backend_user:backend_password@postgres:5432/backend_db
+      DATABASE_URL: postgresql://backend_user:backend_password@postgres:5434/backend_db
       JWT_SECRET: your-super-secret-jwt-key-change-this-in-production
       NODE_ENV: development
     ports:

@@ -1,11 +1,12 @@
 import fastify from 'fastify';
-import { env } from './config/env';
-import { errorHandler } from './middleware/error-handler';
-import { usersRoutes } from './modules/users/users.routes';
-import corsPlugin from './plugins/cors';
-import jwtPlugin from './plugins/jwt';
-import rateLimitPlugin from './plugins/rate-limit';
-import swaggerPlugin from './plugins/swagger';
+import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { env } from './config/env.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { usersRoutes } from './modules/users/users.routes.js';
+import corsPlugin from './plugins/cors.js';
+import jwtPlugin from './plugins/jwt.js';
+import rateLimitPlugin from './plugins/rate-limit.js';
+import swaggerPlugin from './plugins/swagger.js';
 
 export async function buildApp() {
   const app = fastify({
@@ -23,7 +24,7 @@ export async function buildApp() {
             }
           : undefined,
     },
-  });
+  }).withTypeProvider<ZodTypeProvider>();
 
   await app.register(corsPlugin);
   await app.register(jwtPlugin);

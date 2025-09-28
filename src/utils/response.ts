@@ -1,4 +1,4 @@
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   message?: string;
@@ -15,7 +15,11 @@ export function successResponse<T>(data: T, message?: string, statusCode = 200):
   };
 }
 
-export function errorResponse(error: string, message?: string, statusCode = 500): ApiResponse {
+export function errorResponse(
+  error: string,
+  message?: string,
+  statusCode = 500
+): Omit<ApiResponse<null>, 'data'> {
   return {
     success: false,
     error,

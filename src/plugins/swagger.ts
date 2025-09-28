@@ -1,10 +1,18 @@
-import swagger from '@fastify/swagger';
-import swaggerUi from '@fastify/swagger-ui';
+import { fastifySwagger } from '@fastify/swagger';
+import { fastifySwaggerUi } from '@fastify/swagger-ui';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod';
 
 export default fp(async (fastify: FastifyInstance) => {
-  await fastify.register(swagger, {
+  fastify.setValidatorCompiler(validatorCompiler);
+  fastify.setSerializerCompiler(serializerCompiler);
+
+  await fastify.register(fastifySwagger, {
     openapi: {
       openapi: '3.0.0',
       info: {
@@ -32,27 +40,28 @@ export default fp(async (fastify: FastifyInstance) => {
         },
       },
     },
+    transform: jsonSchemaTransform,
   });
 
-  await fastify.register(swaggerUi, {
+  await fastify.register(fastifySwaggerUi, {
     routePrefix: '/documentation',
-    uiConfig: {
-      docExpansion: 'full',
-      deepLinking: false,
-    },
-    uiHooks: {
-      onRequest: (request, reply, next) => {
-        next();
-      },
-      preHandler: (request, reply, next) => {
-        next();
-      },
-    },
-    staticCSP: true,
-    transformStaticCSP: (header) => header,
-    transformSpecification: (swaggerObject, request, reply) => {
-      return swaggerObject;
-    },
-    transformSpecificationClone: true,
+    // uiConfig: {
+    //   docExpansion: 'full',
+    //   deepLinking: false,
+    // },
+    // uiHooks: {
+    //   onRequest: (_request, _reply, next) => {
+    //     next();
+    //   },
+    //   preHandler: (_request, _reply, next) => {
+    //     next();
+    //   },
+    // },
+    // staticCSP: true,
+    // transformStaticCSP: (header) => header,
+    // transformSpecification: (swaggerObject, _request, _reply) => {
+    //   return swaggerObject;
+    // },
+    // transformSpecificationClone: true,
   });
 });

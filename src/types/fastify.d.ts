@@ -1,11 +1,11 @@
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest as OriginalFastifyRequest } from 'fastify';
 
 declare module 'fastify' {
-  interface FastifyRequest {
+  type FastifyRequest = OriginalFastifyRequest & {
     user?: {
       id: string;
       email: string;
       username: string;
     };
-  }
+  };
 }
