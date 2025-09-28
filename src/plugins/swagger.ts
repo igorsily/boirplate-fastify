@@ -1,5 +1,5 @@
 import { fastifySwagger } from '@fastify/swagger';
-import { fastifySwaggerUi } from '@fastify/swagger-ui';
+import ScalarApiReference from '@scalar/fastify-api-reference';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import {
@@ -43,25 +43,15 @@ export default fp(async (fastify: FastifyInstance) => {
     transform: jsonSchemaTransform,
   });
 
-  await fastify.register(fastifySwaggerUi, {
+  fastify.get('/openapi.json', async () => {
+    return fastify.swagger();
+  });
+
+  await fastify.register(ScalarApiReference, {
     routePrefix: '/documentation',
-    // uiConfig: {
-    //   docExpansion: 'full',
-    //   deepLinking: false,
-    // },
-    // uiHooks: {
-    //   onRequest: (_request, _reply, next) => {
-    //     next();
-    //   },
-    //   preHandler: (_request, _reply, next) => {
-    //     next();
-    //   },
-    // },
-    // staticCSP: true,
-    // transformStaticCSP: (header) => header,
-    // transformSpecification: (swaggerObject, _request, _reply) => {
-    //   return swaggerObject;
-    // },
-    // transformSpecificationClone: true,
+    configuration: {
+      title: 'Backend API',
+      url: '/openapi.json',
+    },
   });
 });
