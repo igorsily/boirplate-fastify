@@ -15,6 +15,7 @@ export async function usersRoutes(app: FastifyInstance) {
     {
       schema: {
         tags: ['Users'],
+        security: [{ bearerAuth: [] }],
         body: createUserSchema,
         response: {
           200: z.array(createUserSchema),
@@ -28,6 +29,7 @@ export async function usersRoutes(app: FastifyInstance) {
     {
       schema: {
         tags: ['Users'],
+        security: [{ bearerAuth: [] }],
       },
     },
     usersController.list.bind(usersController)

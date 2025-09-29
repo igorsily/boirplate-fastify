@@ -32,13 +32,14 @@ export default fp(async (fastify: FastifyInstance) => {
       ],
       components: {
         securitySchemes: {
-          apiKey: {
-            type: 'apiKey',
-            name: 'apikey',
-            in: 'header',
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
           },
         },
       },
+      security: [{ bearerAuth: [] }],
     },
     transform: jsonSchemaTransform,
   });
